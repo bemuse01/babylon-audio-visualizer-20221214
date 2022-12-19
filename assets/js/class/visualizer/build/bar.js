@@ -24,12 +24,17 @@ export default class{
         this.splineSmooth = 0.2
         this.audioBoost = 30
         this.audioStep = 30
+        // this.vw = Method.getVisibleWidth(camera, 0)
+        // this.vh = Method.getVisibleHeight(camera, 0)
+
+        // console.log(this.vw, this.vh)
 
         this.plane = null
         this.xs = Array.from({length: this.count}, (_, i) => i * 1)
         // this.renderTarget = new BABYLON.RenderTargetTexture(Method.uuidv4(), {width: this.rw, height: this.rh}, scene)
 
         // scene.customRenderTargets.push(this.renderTarget)
+        // console.log(scene.customRenderTargets)
 
         this.init()
     }
@@ -75,6 +80,8 @@ export default class{
             instance.position.x = x
             instance.position.z = z
 
+            // instance.isVisible = false
+
             // this.renderTarget.renderList.push(instance)
         }
 
@@ -82,6 +89,7 @@ export default class{
         // vls.mesh.material.diffuseTexture = this.renderTarget
         // vls.mesh.material.diffuseTexture.hasAlpha = true
         // vls.mesh.position = new BABYLON.Vector3(0, 0, 0)
+    	// vls.mesh.scaling = new BABYLON.Vector3(160, 100, 90)
     }
     createAttribute(){
         const {count, radius} = this
