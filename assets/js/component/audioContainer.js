@@ -9,7 +9,7 @@ export default {
         const {useStore} = Vuex
 
         // variables
-        const src = 'assets/src/Mirage.mp3'
+        const src = 'assets/src/結束バンド - あのバンド.mp3'
         const store = useStore()
         const audio = computed(() => store.getters['audio/getAudio'])
 
