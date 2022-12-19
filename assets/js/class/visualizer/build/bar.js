@@ -1,6 +1,7 @@
 import ShaderName from '../shader/bar.shader.js'
 import RoundedPlane from '../../objects/roundedPlane.js'
 import Method from '../../../method/method.js'
+import Spline from '../../../lib/cubic-spline.js'
 
 export default class{
     constructor({scene, engine, audio}){
@@ -16,9 +17,13 @@ export default class{
         this.radius = 25
         this.color1 = BABYLON.Color3.FromHexString('#4dfff9')
         this.color2 = BABYLON.Color3.FromHexString('#4d33ea')
-        this.offset = 0.2
+        this.colorOffset = 0.15
+        this.splineSmooth = 0.2
+        this.audioBoost = 30
+        this.audioStep = 30
 
         this.plane = null
+        this.xs = Array.from({length: this.count}, (_, i) => i * 1)
 
         this.init()
     }
@@ -87,7 +92,7 @@ export default class{
             // color
             const idx = i < halfCount
             const p = (i % halfCount) / halfCount
-            const t =  idx ? Method.clamp(p - this.offset, 0, 1) : Method.clamp(1 - this.offset - p, 0, 1)
+            const t =  idx ? Method.clamp(p - this.colorOffset, 0, 1) : Method.clamp(1 - this.colorOffset - p, 0, 1)
             const c = BABYLON.Color3.Lerp(this.color1, this.color2, t)
 
             const r = c.r
@@ -136,15 +141,42 @@ export default class{
 
         if(!audioData) return
 
-        const data = [...audioData].map(e => e / 255)
+        const stepData = this.createStepAudioData(audioData)
+        const splinedData = this.createSplinedAudioData(stepData)
 
         const aAudio = this.plane.getAttribute('aAudio')
         const aAudioData = aAudio.getData()
 
         for(let i = 0; i < this.count; i++){
-            aAudioData[i] = data[i] * 10
+            aAudioData[i] = splinedData[i]
         }
 
         aAudio.update(aAudioData)
+    }
+    createStepAudioData(audioData){
+        return Array.from({length: this.count}, (_, i) => audioData[i * this.audioStep] / 255)
+    }
+    createSplinedAudioData(audioData){
+        const len = audioData.length
+        const ats = []
+
+        const xs = this.xs
+        const ys = audioData
+        // ys[0] = 0
+
+        const spline = new Spline(xs, ys)
+        
+        for(let i = 0; i < len; i++){
+            ats.push(spline.at(i * this.splineSmooth))
+        }
+        
+        const avg = (ats.reduce((p, c) => p + c) / len) * 0.9
+        const temp = ats.map(e => Math.max(0, e - avg) * this.audioBoost)
+
+        // const reverse = [...temp]
+        // reverse.reverse()
+
+        // return [...temp, ...reverse]
+        return temp
     }
 }
