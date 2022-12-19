@@ -5,6 +5,8 @@ export default class{
         this.engine = app.engine
         this.audio = audio
 
+        this.scene = null
+        this.camera = null
         this.cameraName = 'visualizerCamaera'
         this.cameraPos = new BABYLON.Vector3(0, 100, 0)
 
@@ -42,7 +44,7 @@ export default class{
         for(const key in this.modules){
             const instance = this.modules[key]
 
-            this.comps[key] = new instance({scene: this.scene, engine: this.engine, audio: this.audio})
+            this.comps[key] = new instance({scene: this.scene, engine: this.engine, audio: this.audio, camera: this.camera})
         }
     }
 
