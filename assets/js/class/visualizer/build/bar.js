@@ -89,7 +89,7 @@ export default class{
         // vls.mesh.material.diffuseTexture = this.renderTarget
         // vls.mesh.material.diffuseTexture.hasAlpha = true
         // vls.mesh.position = new BABYLON.Vector3(0, 0, 0)
-    	// vls.mesh.scaling = new BABYLON.Vector3(160, 100, 90)
+    	// vls.mesh.scaling = new BABYLON.Vector3(160, 160 * (this.rh / this.rw), 100)
     }
     createAttribute(){
         const {count, radius} = this
