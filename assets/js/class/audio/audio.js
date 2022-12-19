@@ -13,6 +13,8 @@ export default class{
         this.avg = 0
 
         this.context = null
+        this.audioData = null
+        this.splined = []
 
         this.init()
     }
@@ -71,9 +73,9 @@ export default class{
 
         this.analyser.getByteFrequencyData(this.audioData)
 
-        const len = ~~(this.audioData.length / 4)
-        const half = [...this.audioData].slice(0, this.audioData.length)
-        this.audioDataAvg = half.map(e => e / 255).reduce((x, y) => x + y) / len
+        // const len = ~~(this.audioData.length / 4)
+        // const half = [...this.audioData].slice(0, this.audioData.length)
+        // this.audioDataAvg = half.map(e => e / 255).reduce((x, y) => x + y) / len
         // this.audioDataAvg = half[~~(half.length * 0.1)] / 255
     }
 

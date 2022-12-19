@@ -8,6 +8,7 @@ const vertex = `
     attribute vec3 position;
     attribute vec2 uv;
     attribute vec3 aColor;
+    attribute float aAudio;
 
     // uniform mat4 worldViewProjection;
     // uniform float time;
@@ -18,7 +19,11 @@ const vertex = `
     void main(){
         #include<instancesVertex>
 
-        gl_Position = viewProjection * finalWorld * vec4(position, 1.0);
+        vec3 nPosition = position;
+
+        if(uv.y <= 0.5) nPosition.z -= aAudio;
+
+        gl_Position = viewProjection * finalWorld * vec4(nPosition, 1.0);
 
         vColor = aColor;
     }

@@ -16,6 +16,9 @@ export default class{
         this.radius = 25
         this.color1 = BABYLON.Color3.FromHexString('#4dfff9')
         this.color2 = BABYLON.Color3.FromHexString('#4d33ea')
+        this.offset = 0.2
+
+        this.plane = null
 
         this.init()
     }
@@ -33,17 +36,18 @@ export default class{
         const {count, width, height, edgeRadius, radius, seg, scene, engine} = this
 
         const material = this.createMaterial()
-        const plane = new RoundedPlane({width, height, radius: edgeRadius, seg, scene, engine})
-        plane.get().isVisible = false
-        plane.setMaterial(material)
+        this.plane = new RoundedPlane({width, height, radius: edgeRadius, seg, scene, engine})
+        this.plane.get().isVisible = false
+        this.plane.setMaterial(material)
 
 
-        const {color} = this.createAttribute()
-        plane.setAttribute('aColor', new Float32Array(color), 3, true)
+        const {color, audio} = this.createAttribute()
+        this.plane.setAttribute('aColor', new Float32Array(color), 3, true)
+        this.plane.setAttribute('aAudio', new Float32Array(audio), 1, true)
 
-        // plane.setAttribute('aPosition', new Float32Array(position), 3, true)
+        // this.plane.setAttribute('aPosition', new Float32Array(position), 3, true)
 
-        const mesh = plane.get()
+        const mesh = this.plane.get()
         const degree = 360 / count
 
         for(let i = 0; i < count; i++){
@@ -66,6 +70,7 @@ export default class{
 
         const position = []
         const color = []
+        const audio = []
 
         const degree = 360 / count
         const halfCount = count / 2
@@ -82,7 +87,7 @@ export default class{
             // color
             const idx = i < halfCount
             const p = (i % halfCount) / halfCount
-            const t =  idx ? p : 1 - p
+            const t =  idx ? Method.clamp(p - this.offset, 0, 1) : Method.clamp(1 - this.offset - p, 0, 1)
             const c = BABYLON.Color3.Lerp(this.color1, this.color2, t)
 
             const r = c.r
@@ -90,11 +95,15 @@ export default class{
             const b = c.b
 
             color.push(r, g, b)
+
+            // audio
+            audio.push(0)
         }
 
         return{
             position,
-            color
+            color,
+            audio
         }
     }
     createMaterial(){
@@ -103,7 +112,7 @@ export default class{
             fragment: ShaderName,
         },
         {
-            attributes: ['position', 'uv', 'aColor'],
+            attributes: ['position', 'uv', 'aColor', 'aAudio'],
             uniforms: ['worldViewProjection', 'viewProjection', 'uColor'],
             needAlphaBlending: true,
             needAlphaTesting: true,
@@ -123,5 +132,19 @@ export default class{
         requestAnimationFrame(() => this.animate())
     }
     render(){
+        const {audioData} = this.audio
+
+        if(!audioData) return
+
+        const data = [...audioData].map(e => e / 255)
+
+        const aAudio = this.plane.getAttribute('aAudio')
+        const aAudioData = aAudio.getData()
+
+        for(let i = 0; i < this.count; i++){
+            aAudioData[i] = data[i] * 10
+        }
+
+        aAudio.update(aAudioData)
     }
 }

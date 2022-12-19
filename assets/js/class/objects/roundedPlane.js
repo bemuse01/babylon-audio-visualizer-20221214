@@ -86,7 +86,7 @@ export default class{
         return this.mesh
     }
     getAttribute(name){
-        return this.mesh.getVerticesData(name)
+        return this.mesh.getVertexBuffer(name)
     }
 
 
@@ -95,7 +95,13 @@ export default class{
         this.mesh.material = material
     }
     setAttribute(name, data, size, instanced = false){
-        const buffer = new BABYLON.VertexBuffer(this.engine, data, name, false, false, size, instanced);
+        const buffer = new BABYLON.VertexBuffer(this.engine, data, name, true, false, size, instanced);
         this.mesh.setVerticesBuffer(buffer)
+    }
+
+
+    // update
+    updateAttribute(name, data){
+        this.mesh.updateVerticesData(name, data)
     }
 }
