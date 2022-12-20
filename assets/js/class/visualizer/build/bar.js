@@ -4,14 +4,17 @@ import Method from '../../../method/method.js'
 import Spline from '../../../lib/cubic-spline.js'
 
 export default class{
-    constructor({scene, engine, camera, audio}){
+    constructor({scene, engine, camera, audio, rtt}){
         this.scene = scene
         this.engine = engine
         this.camera = camera
         this.audio = audio
+        this.rtt = rtt
 
         this.rw = engine.getRenderWidth()
         this.rh = engine.getRenderHeight()
+        this.vw = Method.getVisibleWidth(camera, this.rw / this.rh, 0)
+        this.vh = Method.getVisibleHeight(camera, 0)
         this.count = 100
         this.width = 1.25
         this.height = 1.25
@@ -24,10 +27,6 @@ export default class{
         this.splineSmooth = 0.2
         this.audioBoost = 30
         this.audioStep = 30
-        // this.vw = Method.getVisibleWidth(camera, 0)
-        // this.vh = Method.getVisibleHeight(camera, 0)
-
-        // console.log(this.vw, this.vh)
 
         this.plane = null
         this.xs = Array.from({length: this.count}, (_, i) => i * 1)
@@ -81,15 +80,9 @@ export default class{
             instance.position.z = z
 
             // instance.isVisible = false
-
-            // this.renderTarget.renderList.push(instance)
+            this.scene.removeMesh(instance)
+            this.rtt.renderList.push(instance)
         }
-
-        // const vls = new BABYLON.VolumetricLightScatteringPostProcess('vls', 1.0, camera, null, 100, BABYLON.Texture.BILINEAR_SAMPLINGMODE, engine, false)
-        // vls.mesh.material.diffuseTexture = this.renderTarget
-        // vls.mesh.material.diffuseTexture.hasAlpha = true
-        // vls.mesh.position = new BABYLON.Vector3(0, 0, 0)
-    	// vls.mesh.scaling = new BABYLON.Vector3(160, 160 * (this.rh / this.rw), 100)
     }
     createAttribute(){
         const {count, radius} = this

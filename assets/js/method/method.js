@@ -3,15 +3,15 @@ export default {
         return (b - a) * (x - min) / (max - min) + a 
     },
     getVisibleHeight(camera, depth){
-        const cameraOffset = camera.position.z
+        const cameraOffset = camera.position.y
         if(depth < cameraOffset) depth -= cameraOffset
         else depth += cameraOffset
-        const vFov = camera.fov * RADIAN
+        const vFov = camera.fov
         return 2 * Math.tan(vFov / 2) * Math.abs(depth)
     },
-    getVisibleWidth(camera, depth){
+    getVisibleWidth(camera, aspect, depth){
         const height = this.getVisibleHeight(camera, depth)
-        return height * camera.aspect
+        return height * aspect
     },
     clamp(x, min, max){
         return x <= min ? min : x >= max ? max : x
