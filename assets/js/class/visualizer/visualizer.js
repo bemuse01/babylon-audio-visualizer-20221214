@@ -1,4 +1,5 @@
 import Bar from './build/bar.js'
+import Progress from './build/progress.js'
 import Method from '../../method/method.js'
 
 export default class{
@@ -9,7 +10,7 @@ export default class{
         this.scene = null
         this.camera = null
         this.cameraName = 'visualizerCamaera'
-        this.cameraPos = new BABYLON.Vector3(0, 100, 0)
+        this.cameraPos = new BABYLON.Vector3(0, 0, -100)
         this.rw = this.engine.getRenderWidth()
         this.rh = this.engine.getRenderHeight()
         this.vw = null
@@ -33,7 +34,7 @@ export default class{
                 masterOpacity: 0.275,
                 effect: false,
                 play: false,
-                masterY: -0.001
+                masterZ: 0.001
             },
             {
                 module: Bar,
@@ -50,8 +51,11 @@ export default class{
                 masterOpacity: 1.0,
                 effect: true,
                 play: true,
-                masterY: 0
-            }
+                masterZ: 0
+            },
+            // {
+            //     module: Progress
+            // }
         ]
         this.comps = []
 
@@ -124,6 +128,7 @@ export default class{
         this.vls.mesh.material.diffuseTexture.hasAlpha = true
         this.vls.mesh.position = new BABYLON.Vector3(0, 0, 0)
     	this.vls.mesh.scaling = new BABYLON.Vector3(this.vw, this.vh, 1)
+        // console.log(this.vw, this.vh)
     }
 
 

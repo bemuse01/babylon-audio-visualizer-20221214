@@ -21,7 +21,7 @@ const vertex = `
 
         vec3 nPosition = position;
 
-        if(uv.y <= 0.5) nPosition.z -= aAudio;
+        if(uv.y <= 0.5) nPosition.y -= aAudio;
 
         gl_Position = viewProjection * finalWorld * vec4(nPosition, 1.0);
 

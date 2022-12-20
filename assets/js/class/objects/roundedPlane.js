@@ -36,6 +36,8 @@ export default class{
         )
 
         this.mesh.material = material
+
+        this.updatePosition()
     }
     createShape(){
         const {width, height, radius, seg} = this
@@ -72,12 +74,24 @@ export default class{
         return shape
     }
     createMaterial(){
-        const name = Method.uuidv4()
-
-        const material = new BABYLON.StandardMaterial(name, this.scene)
+        const material = new BABYLON.StandardMaterial(Method.uuidv4(), this.scene)
         material.emissiveColor = new BABYLON.Color3(1, 1, 1)
 
         return material
+    }
+    updatePosition(){
+        const position = this.mesh.getVerticesData('position')
+        const len = position.length / 3
+
+        for(let i = 0; i < len; i++){
+            const idx = i * 3
+            const z = position[idx + 2]
+
+            position[idx + 1] = z
+            position[idx + 2] = 0
+        }
+
+        this.mesh.updateVerticesData('position', position)
     }
 
 

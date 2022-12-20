@@ -3,7 +3,7 @@ export default {
         return (b - a) * (x - min) / (max - min) + a 
     },
     getVisibleHeight(camera, depth){
-        const cameraOffset = camera.position.y
+        const cameraOffset = camera.position.z
         if(depth < cameraOffset) depth -= cameraOffset
         else depth += cameraOffset
         const vFov = camera.fov

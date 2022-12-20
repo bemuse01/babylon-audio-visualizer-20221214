@@ -23,7 +23,7 @@ export default class{
         masterOpacity,
         effect,
         play,
-        masterY
+        masterZ
     }){
         this.scene = scene
         this.engine = engine
@@ -43,7 +43,7 @@ export default class{
         this.masterOpacity = masterOpacity
         this.effect = effect
         this.play = play
-        this.masterY = masterY
+        this.masterZ = masterZ
 
         this.edgeRadius = this.width / 2
         this.seg = 32
@@ -84,16 +84,17 @@ export default class{
             const deg = (degree * i - 90)
 
             const x = Math.cos(deg * RADIAN) * radius
-            const z = Math.sin(deg * RADIAN) * radius
+            const y = Math.sin(deg * RADIAN) * radius
 
             const name = Method.uuidv4()
             const instance = mesh.createInstance(name)
 
-            instance.rotation.y = -(90 + deg) * RADIAN
+            instance.rotation.z = (90 + deg) * RADIAN
 
             instance.position.x = x
-            instance.position.y = this.masterY
-            instance.position.z = z
+            instance.position.y = y
+            instance.position.z = this.masterZ
+
 
             if(this.effect){
                 this.scene.removeMesh(instance)
@@ -152,6 +153,7 @@ export default class{
             uniforms: ['worldViewProjection', 'viewProjection', 'uOpacity'],
             needAlphaBlending: true,
             needAlphaTesting: true,
+            // sideOrientation: BABYLON.Mesh.DOUBLESID
         },
         )
 
