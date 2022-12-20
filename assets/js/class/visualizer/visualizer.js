@@ -30,8 +30,10 @@ export default class{
                 color1: BABYLON.Color3.FromHexString('#4dfff9'),
                 color2: BABYLON.Color3.FromHexString('#4d33ea'),
                 colorOffset: 0.1,
-                masterOpacity: 0.4,
+                masterOpacity: 0.275,
+                effect: false,
                 play: false,
+                masterY: -0.001
             },
             {
                 module: Bar,
@@ -46,7 +48,9 @@ export default class{
                 color2: BABYLON.Color3.FromHexString('#4d33ea'),
                 colorOffset: 0.1,
                 masterOpacity: 1.0,
+                effect: true,
                 play: true,
+                masterY: 0
             }
         ]
         this.comps = []

@@ -5,11 +5,11 @@ import Spline from '../../../lib/cubic-spline.js'
 
 export default class{
     constructor({
-        scene, 
-        engine, 
+        scene,
+        engine,
         camera, 
         audio, 
-        rtt, 
+        rtt,
         count, 
         width, 
         height, 
@@ -21,7 +21,9 @@ export default class{
         audioBoost,
         audioStep,
         masterOpacity,
-        play
+        effect,
+        play,
+        masterY
     }){
         this.scene = scene
         this.engine = engine
@@ -39,7 +41,9 @@ export default class{
         this.audioBoost = audioBoost
         this.audioStep = audioStep
         this.masterOpacity = masterOpacity
+        this.effect = effect
         this.play = play
+        this.masterY = masterY
 
         this.edgeRadius = this.width / 2
         this.seg = 32
@@ -88,10 +92,13 @@ export default class{
             instance.rotation.y = -(90 + deg) * RADIAN
 
             instance.position.x = x
+            instance.position.y = this.masterY
             instance.position.z = z
 
-            this.scene.removeMesh(instance)
-            this.rtt.renderList.push(instance)
+            if(this.effect){
+                this.scene.removeMesh(instance)
+                this.rtt.renderList.push(instance)
+            }
         }
     }
     createAttribute(){
