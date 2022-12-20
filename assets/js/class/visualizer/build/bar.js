@@ -4,25 +4,45 @@ import Method from '../../../method/method.js'
 import Spline from '../../../lib/cubic-spline.js'
 
 export default class{
-    constructor({scene, engine, camera, audio, rtt}){
+    constructor({
+        scene, 
+        engine, 
+        camera, 
+        audio, 
+        rtt, 
+        count, 
+        width, 
+        height, 
+        radius, 
+        color1, 
+        color2, 
+        colorOffset, 
+        splineSmooth,
+        audioBoost,
+        audioStep,
+        masterOpacity,
+        play
+    }){
         this.scene = scene
         this.engine = engine
         this.camera = camera
         this.audio = audio
         this.rtt = rtt
+        this.count = count
+        this.width = width
+        this.height = height
+        this.radius = radius
+        this.color1 = color1
+        this.color2 = color2
+        this.colorOffset = colorOffset
+        this.splineSmooth = splineSmooth
+        this.audioBoost = audioBoost
+        this.audioStep = audioStep
+        this.masterOpacity = masterOpacity
+        this.play = play
 
-        this.count = 100
-        this.width = 1.25
-        this.height = 1.25
         this.edgeRadius = this.width / 2
         this.seg = 32
-        this.radius = 25
-        this.color1 = BABYLON.Color3.FromHexString('#4dfff9')
-        this.color2 = BABYLON.Color3.FromHexString('#4d33ea')
-        this.colorOffset = 0.1
-        this.splineSmooth = 0.2
-        this.audioBoost = 30
-        this.audioStep = 30
 
         this.plane = null
         this.xs = Array.from({length: this.count}, (_, i) => i * 1)
@@ -34,7 +54,7 @@ export default class{
     // init
     init(){
         this.create()
-        this.animate()
+        if(this.play) this.animate()
     }
 
 
@@ -122,13 +142,13 @@ export default class{
         },
         {
             attributes: ['position', 'uv', 'aColor', 'aAudio'],
-            uniforms: ['worldViewProjection', 'viewProjection', 'uColor'],
+            uniforms: ['worldViewProjection', 'viewProjection', 'uOpacity'],
             needAlphaBlending: true,
             needAlphaTesting: true,
         },
         )
 
-        // material.setColor3('uColor', BABYLON.Color3.FromHexString('#ffffff'))
+        material.setFloat('uOpacity', this.masterOpacity)
 
         return material
     }

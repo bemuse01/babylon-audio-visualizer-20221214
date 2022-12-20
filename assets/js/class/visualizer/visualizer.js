@@ -15,12 +15,41 @@ export default class{
         this.vw = null
         this.vh = null
         this.vlsSample = 100
-        this.rttSamples = 2 ** 9
+        this.rttSamples = 2 ** 3
 
-        this.modules = {
-            Bar
-        }
-        this.comps = {}
+        this.params = [
+            {
+                module: Bar,
+                count: 100,
+                width: 1.25,
+                height: 1.25 + 2,
+                radius: 25 - 2 / 2,
+                splineSmooth: 0.2,
+                audioBoost: 30,
+                audioStep: 30,
+                color1: BABYLON.Color3.FromHexString('#4dfff9'),
+                color2: BABYLON.Color3.FromHexString('#4d33ea'),
+                colorOffset: 0.1,
+                masterOpacity: 0.4,
+                play: false,
+            },
+            {
+                module: Bar,
+                count: 100,
+                width: 1.25,
+                height: 1.25,
+                radius: 25,
+                splineSmooth: 0.2,
+                audioBoost: 30,
+                audioStep: 30,
+                color1: BABYLON.Color3.FromHexString('#4dfff9'),
+                color2: BABYLON.Color3.FromHexString('#4d33ea'),
+                colorOffset: 0.1,
+                masterOpacity: 1.0,
+                play: true,
+            }
+        ]
+        this.comps = []
 
         this.init()
     }
@@ -58,10 +87,19 @@ export default class{
         this.scene.customRenderTargets.push(this.rtt)
     }
     createObject(){
-        for(const key in this.modules){
-            const instance = this.modules[key]
+        for(const param of this.params){
+            const instance = param.module
 
-            this.comps[key] = new instance({scene: this.scene, engine: this.engine, audio: this.audio, camera: this.camera, rtt: this.rtt})
+            this.comps.push(
+                new instance({
+                    scene: this.scene, 
+                    engine: this.engine, 
+                    audio: this.audio, 
+                    camera: this.camera, 
+                    rtt: this.rtt,
+                    ...param
+                })
+            )
         }
     }
     createPostProcess(){
