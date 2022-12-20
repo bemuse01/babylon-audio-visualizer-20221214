@@ -11,10 +11,6 @@ export default class{
         this.audio = audio
         this.rtt = rtt
 
-        this.rw = engine.getRenderWidth()
-        this.rh = engine.getRenderHeight()
-        this.vw = Method.getVisibleWidth(camera, this.rw / this.rh, 0)
-        this.vh = Method.getVisibleHeight(camera, 0)
         this.count = 100
         this.width = 1.25
         this.height = 1.25
@@ -30,10 +26,6 @@ export default class{
 
         this.plane = null
         this.xs = Array.from({length: this.count}, (_, i) => i * 1)
-        // this.renderTarget = new BABYLON.RenderTargetTexture(Method.uuidv4(), {width: this.rw, height: this.rh}, scene)
-
-        // scene.customRenderTargets.push(this.renderTarget)
-        // console.log(scene.customRenderTargets)
 
         this.init()
     }
@@ -59,7 +51,6 @@ export default class{
         const {color, audio} = this.createAttribute()
         this.plane.setAttribute('aColor', new Float32Array(color), 3, true)
         this.plane.setAttribute('aAudio', new Float32Array(audio), 1, true)
-
         // this.plane.setAttribute('aPosition', new Float32Array(position), 3, true)
 
         const mesh = this.plane.get()
@@ -79,7 +70,6 @@ export default class{
             instance.position.x = x
             instance.position.z = z
 
-            // instance.isVisible = false
             this.scene.removeMesh(instance)
             this.rtt.renderList.push(instance)
         }

@@ -14,6 +14,7 @@ export default class{
         this.rh = this.engine.getRenderHeight()
         this.vw = null
         this.vh = null
+        this.vlsSample = 100
 
         this.modules = {
             Bar
@@ -29,7 +30,7 @@ export default class{
         this.create()
         this.run()
 
-        window.addEventListener('resize', this.resize, false)
+        window.addEventListener('resize', () => this.resize(), false)
     }
 
 
@@ -63,23 +64,20 @@ export default class{
         this.createVLS()
     }
     createVLS(){
-        const sample = 100
-        const vls = new BABYLON.VolumetricLightScatteringPostProcess(
+        this.vls = new BABYLON.VolumetricLightScatteringPostProcess(
             'vls1', 
             1.0, 
             this.camera, 
             null,
-            sample, 
+            this.vlsSample, 
             BABYLON.Texture.BILINEAR_SAMPLINGMODE, 
             this.engine, 
             false
         )
-        vls.mesh.material.diffuseTexture = this.rtt
-        vls.mesh.material.diffuseTexture.hasAlpha = true
-        vls.mesh.position = new BABYLON.Vector3(0, 0, 0)
-    	vls.mesh.scaling = new BABYLON.Vector3(this.vw * 1, this.vh * 1, 1)
-
-        // this.rtt.addPostProcess(vls)
+        this.vls.mesh.material.diffuseTexture = this.rtt
+        this.vls.mesh.material.diffuseTexture.hasAlpha = true
+        this.vls.mesh.position = new BABYLON.Vector3(0, 0, 0)
+    	this.vls.mesh.scaling = new BABYLON.Vector3(this.vw, this.vh, 1)
     }
 
 
@@ -96,9 +94,12 @@ export default class{
 
     // resize
     resize(){
-        this.rw = engine.getRenderWidth()
-        this.rh = engine.getRenderHeight()
+        this.rw = this.engine.getRenderWidth()
+        this.rh = this.engine.getRenderHeight()
         this.vw = Method.getVisibleWidth(this.camera, this.rw / this.rh, 0)
         this.vh = Method.getVisibleHeight(this.camera, 0)
+
+        this.rtt.resize({width: this.rw, height: this.rh})
+    	this.vls.mesh.scaling = new BABYLON.Vector3(this.vw, this.vh, 1)
     }
 }
