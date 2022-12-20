@@ -81,7 +81,7 @@ export default class{
         const degree = 360 / count
 
         for(let i = 0; i < count; i++){
-            const deg = (degree * i - 90)
+            const deg = (degree * i + 90)
 
             const x = Math.cos(deg * RADIAN) * radius
             const y = Math.sin(deg * RADIAN) * radius

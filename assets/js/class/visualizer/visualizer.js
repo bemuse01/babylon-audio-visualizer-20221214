@@ -10,7 +10,7 @@ export default class{
         this.scene = null
         this.camera = null
         this.cameraName = 'visualizerCamaera'
-        this.cameraPos = new BABYLON.Vector3(0, 0, 100)
+        this.cameraPos = new BABYLON.Vector3(0, 0, -100)
         this.rw = this.engine.getRenderWidth()
         this.rh = this.engine.getRenderHeight()
         this.vw = null
@@ -34,7 +34,7 @@ export default class{
                 masterOpacity: 0.275,
                 effect: false,
                 play: false,
-                masterZ: -0.001
+                masterZ: 0.001
             },
             {
                 module: Bar,

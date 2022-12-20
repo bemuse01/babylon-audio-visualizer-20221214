@@ -94,6 +94,7 @@ export default class{
     }
     createMaterial(){
         const material = new BABYLON.StandardMaterial(Method.uuidv4(), this.scene)
+        material.sideOrientation = BABYLON.Mesh.BACKSIDE
         material.emissiveColor = new BABYLON.Color3(1, 1, 1)
 
         return material
@@ -109,5 +110,8 @@ export default class{
     // get
     get(){
         return this.mesh
+    }
+    getMaterial(){
+        return this.mesh.material
     }
 }
