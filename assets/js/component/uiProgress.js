@@ -64,7 +64,7 @@ export default {
             bottom: '0',
             left: '0',
             width: '100%',
-            height: '4px',
+            height: '3px',
             transform: 'scaleY(1)',
             transformOrigin: 'bottom',
             transition: 'transform 0.3s'
@@ -102,7 +102,7 @@ export default {
             trackStyle.value.width = `${width}px`
         }
         const onMouseenter = () => {
-            transformStyle.value.transform = 'scaleY(4)'
+            transformStyle.value.transform = 'scaleY(5)'
             trackStyle.value.opacity = '1'
         }
         const onMouseleave = () => {
