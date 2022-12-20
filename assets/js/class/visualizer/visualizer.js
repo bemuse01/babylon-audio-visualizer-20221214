@@ -48,7 +48,8 @@ export default class{
         this.camera = new BABYLON.FreeCamera(this.cameraName, this.cameraPos, this.scene)
         this.camera.setTarget(BABYLON.Vector3.Zero())
         
-        this.vw = Method.getVisibleWidth(this.camera, this.rw / this.rh, 0)
+        this.aspect = this.engine.getAspectRatio(this.camera)
+        this.vw = Method.getVisibleWidth(this.camera, this.aspect, 0)
         this.vh = Method.getVisibleHeight(this.camera, 0)
 
         this.rtt = new BABYLON.RenderTargetTexture(Method.uuidv4(), {width: this.rw, height: this.rh}, this.scene)
@@ -99,6 +100,7 @@ export default class{
     resize(){
         this.rw = this.engine.getRenderWidth()
         this.rh = this.engine.getRenderHeight()
+        this.aspect = this.engine.getAspectRatio(this.camera)
         this.vw = Method.getVisibleWidth(this.camera, this.rw / this.rh, 0)
         this.vh = Method.getVisibleHeight(this.camera, 0)
 
