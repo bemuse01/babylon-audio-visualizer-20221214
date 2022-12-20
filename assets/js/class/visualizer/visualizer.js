@@ -15,6 +15,7 @@ export default class{
         this.vw = null
         this.vh = null
         this.vlsSample = 100
+        this.rttSamples = 2 ** 9
 
         this.modules = {
             Bar
@@ -51,6 +52,8 @@ export default class{
         this.vh = Method.getVisibleHeight(this.camera, 0)
 
         this.rtt = new BABYLON.RenderTargetTexture(Method.uuidv4(), {width: this.rw, height: this.rh}, this.scene)
+        this.rtt.samples = this.rttSamples
+        console.log(this.rttSamples)
         this.scene.customRenderTargets.push(this.rtt)
     }
     createObject(){
