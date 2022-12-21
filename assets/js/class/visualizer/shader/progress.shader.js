@@ -31,11 +31,11 @@ const fragment = `
         vec2 coord2 = oResolution * (gl_FragCoord.xy / eResolution) - oResolution * 0.5;
 
         float radian = atan(coord1.x, -coord1.y);
-        float p = radians(mix(180.0, -180.0, progress));
+        float p1 = radians(mix(180.0, -180.0, progress));
         float p2 = radians(mix(90.0, -270.0, progress));
         float opacity = 0.0;
 
-        if(radian >= p) opacity = 1.0;
+        if(radian >= p1) opacity = 1.0;
 
         float degree = degrees(radian);
         float d1 = executeNormalizing(degree, 0.0, 1.0, 0.0, 180.0);
