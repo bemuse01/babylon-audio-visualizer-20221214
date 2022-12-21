@@ -53,9 +53,9 @@ export default class{
                 play: true,
                 masterZ: 0
             },
-            // {
-            //     module: Progress
-            // }
+            {
+                module: Progress
+            }
         ]
         this.comps = []
 
