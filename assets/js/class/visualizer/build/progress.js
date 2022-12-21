@@ -81,9 +81,11 @@ export default class{
         if(!this.audio.isReady()) return
 
         const material = this.ring.getMaterial()
+        const p = this.audio.getProgress()
 
-        const progress = (1 - this.audio.getProgress()) * 360 * RADIAN
+        // const progress = (1 - this.audio.getProgress()) * 360 * RADIAN
+        // const progress = BABYLON.Scalar.Lerp(-90, 90, p) * RADIAN
 
-        material.setFloat('progress', progress)
+        material.setFloat('progress', p)
     }
 }

@@ -22,10 +22,11 @@ const fragment = `
     void main(){
         vec2 coord = gl_FragCoord.xy - eResolution * 0.5;
 
-        float radian = atan(coord.y, coord.x) + radians(180.0);
+        float radian = atan(coord.y, coord.x);
+        float p = radians(mix(180.0, -180.0, progress));
         float opacity = 0.0;
 
-        if(radian >= progress) opacity = 1.0;
+        if(radian >= p) opacity = 1.0;
 
         gl_FragColor = vec4(1.0, 1.0, 1.0, opacity);
     }
