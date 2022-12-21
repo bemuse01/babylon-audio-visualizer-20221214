@@ -30,6 +30,7 @@ const fragment = `
         vec2 coord1 = gl_FragCoord.xy - eResolution * 0.5;
         vec2 coord2 = oResolution * (gl_FragCoord.xy / eResolution) - oResolution * 0.5;
 
+        // progress circle
         float radian = atan(coord1.x, -coord1.y);
         float p1 = radians(mix(180.0, -180.0, progress));
         float p2 = radians(mix(90.0, -270.0, progress));

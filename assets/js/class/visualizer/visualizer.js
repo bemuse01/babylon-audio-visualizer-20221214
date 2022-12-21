@@ -1,5 +1,6 @@
 import Bar from './build/bar.js'
 import Progress from './build/progress.js'
+import Current from './build/current.js'
 import Method from '../../method/method.js'
 
 export default class{
@@ -55,6 +56,9 @@ export default class{
             },
             {
                 module: Progress
+            },
+            {
+                module: Current
             }
         ]
         this.comps = []

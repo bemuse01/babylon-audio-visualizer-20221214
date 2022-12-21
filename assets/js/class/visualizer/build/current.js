@@ -1,5 +1,4 @@
 import Ring from '../../objects/ring.js'
-import ShaderName from '../shader/progress.shader.js'
 import Method from '../../../method/method.js'
 
 export default class{
@@ -16,16 +15,13 @@ export default class{
         this.audio = audio
         this.rtt = rtt
 
-        this.rw = this.engine.getRenderWidth()
-        this.rh = this.engine.getRenderHeight()
-        this.aspect = this.engine.getAspectRatio(this.camera)
-        this.vw = Method.getVisibleWidth(this.camera, this.aspect, 0)
-        this.vh = Method.getVisibleHeight(this.camera, 0)
-        this.radius = 21.5
-        this.linewidth = 2
-        this.seg = 64
+        this.planeHeight = 20
+        this.fontSize = 512
+        this.font = `${this.fontSize}px RobotoLight`
         this.color1 = BABYLON.Color3.FromHexString('#4dfff9')
         this.color2 = BABYLON.Color3.FromHexString('#4d33ea')
+
+        this.textTexture = null
 
         this.init()
     }
@@ -42,23 +38,37 @@ export default class{
 
     // create
     create(){
-        const {radius, linewidth, seg, scene} = this
+        const {planeHeight} = this
+        const {planeWidth} = this.createTexture()
+      
+        const mat = new BABYLON.StandardMaterial(Method.uuidv4(), this.scene)
+        mat.diffuseTexture = this.textTexture
+        mat.diffuseTexture.hasAlpha = true
+        mat.emissiveColor = new BABYLON.Color3(1, 1, 1)
 
-        const material = this.createMaterial()
+        const plane = BABYLON.MeshBuilder.CreatePlane('plane1', {width: planeWidth, height: planeHeight}, this.scene)
+        plane.material = mat
 
-        this.ring = new Ring({
-            innerRadius: radius,
-            outerRadius: radius + linewidth,
-            seg,
-            scene
-        })
+        this.scene.removeMesh(plane)
+        this.rtt.renderList.push(plane)
+    }
+    createTexture(){
+        const text = '0:00'
+        const textureHeight = 1.5 * this.fontSize
+    
+        const ratio = this.planeHeight / textureHeight
+        
+        const temp = new BABYLON.DynamicTexture('temp', 64, this.scene)
+        const tmpctx = temp.getContext()
+        tmpctx.font = this.font
+        const textureWidth = tmpctx.measureText(text).width + 8
 
-        // this.ring.get().rotation.z = 90 * RADIAN
+        const planeWidth = textureWidth * ratio
 
-        this.ring.setMaterial(material)
+        this.textTexture = new BABYLON.DynamicTexture(Method.uuidv4(), {width: textureWidth, height: textureHeight}, this.scene, false)
+        this.textTexture.drawText(text, null, null, this.font, '#ffffff', 'transparent', true)
 
-        this.scene.removeMesh(this.ring.get())
-        this.rtt.renderList.push(this.ring.get())
+        return {planeWidth}
     }
     createMaterial(){
         const material = new BABYLON.ShaderMaterial('particleShader', this.scene, {
@@ -92,28 +102,10 @@ export default class{
     }
     render(){
         if(!this.audio.isReady()) return
-
-        const material = this.ring.getMaterial()
-        const p = this.audio.getProgress()
-
-        // const progress = (1 - this.audio.getProgress()) * 360 * RADIAN
-        // const progress = BABYLON.Scalar.Lerp(-90, 90, p) * RADIAN
-
-        material.setFloat('progress', p)
     }
 
 
     // resize
     resize(){
-        this.rw = this.engine.getRenderWidth()
-        this.rh = this.engine.getRenderHeight()
-        this.aspect = this.engine.getAspectRatio(this.camera)
-        this.vw = Method.getVisibleWidth(this.camera, this.aspect, 0)
-        this.vh = Method.getVisibleHeight(this.camera, 0)
-
-        const material = this.ring.getMaterial()
-
-        material.setVector2('eResolution', new BABYLON.Vector2(this.rw, this.rh))
-        material.setVector2('oResolution', new BABYLON.Vector2(this.vw, this.vh))
     }
 }
