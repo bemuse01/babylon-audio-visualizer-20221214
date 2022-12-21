@@ -17,7 +17,7 @@ export default class{
 
         this.planeHeight = 20
         this.fontSize = 512
-        this.font = `${this.fontSize}px RobotoLight`
+        this.font = `${this.fontSize}px NotoSansDisplayLight`
         this.color1 = BABYLON.Color3.FromHexString('#4dfff9')
         this.color2 = BABYLON.Color3.FromHexString('#4d33ea')
 
