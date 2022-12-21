@@ -17,17 +17,22 @@ const vertex = `
 `
 const fragment = `
     uniform vec2 eResolution;    
+    uniform vec2 oResolution;    
     uniform float progress;
     uniform vec3 color1;
     uniform vec3 color2;
+    uniform float radius;
+    uniform float size;
 
     ${ShaderMethod.executeNormalizing()}
 
     void main(){
-        vec2 coord = gl_FragCoord.xy - eResolution * 0.5;
+        vec2 coord1 = gl_FragCoord.xy - eResolution * 0.5;
+        vec2 coord2 = oResolution * (gl_FragCoord.xy / eResolution) - oResolution * 0.5;
 
-        float radian = atan(coord.x, -coord.y);
+        float radian = atan(coord1.x, -coord1.y);
         float p = radians(mix(180.0, -180.0, progress));
+        float p2 = radians(mix(90.0, -270.0, progress));
         float opacity = 0.0;
 
         if(radian >= p) opacity = 1.0;
@@ -39,6 +44,17 @@ const fragment = `
 
         if(degree <= 180.0 && degree >= 0.0) color = mix(color2, color1, d1);
         else color = mix(color1, color2, d2);
+
+        // rounded edge
+        float x1 = cos(p2) * radius;
+        float y1 = sin(p2) * radius;
+        float x2 = cos(radians(90.0)) * radius;
+        float y2 = sin(radians(90.0)) * radius;
+        float dist1 = distance(vec2(x1, y1), coord2);
+        float dist2 = distance(vec2(x2, y2), coord2);
+        
+        if(dist1 < size) opacity = 1.0;
+        if(dist2 < size) opacity = 1.0;
 
         gl_FragColor = vec4(color, opacity);
     }

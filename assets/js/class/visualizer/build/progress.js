@@ -1,5 +1,6 @@
 import Ring from '../../objects/ring.js'
 import ShaderName from '../shader/progress.shader.js'
+import Method from '../../../method/method.js'
 
 export default class{
     constructor({
@@ -17,6 +18,9 @@ export default class{
 
         this.rw = this.engine.getRenderWidth()
         this.rh = this.engine.getRenderHeight()
+        this.aspect = this.engine.getAspectRatio(this.camera)
+        this.vw = Method.getVisibleWidth(this.camera, this.aspect, 0)
+        this.vh = Method.getVisibleHeight(this.camera, 0)
         this.radius = 21.5
         this.linewidth = 2
         this.seg = 64
@@ -61,15 +65,18 @@ export default class{
             },
             {
                 attributes: ['position', 'uv'],
-                uniforms: ['worldViewProjection', 'viewProjection', 'eResolution', 'progress', 'color1', 'color2'],
+                uniforms: ['worldViewProjection', 'viewProjection', 'eResolution', 'oResolution', 'progress', 'color1', 'color2', 'radius', 'size'],
                 needAlphaBlending: true,
                 needAlphaTesting: true,
             },
         )
 
         material.setVector2('eResolution', new BABYLON.Vector2(this.rw, this.rh))
+        material.setVector2('oResolution', new BABYLON.Vector2(this.vw, this.vh))
         material.setColor3('color1', this.color1)
         material.setColor3('color2', this.color2)
+        material.setFloat('radius', this.radius + this.linewidth / 2)
+        material.setFloat('size', this.linewidth / 2)
 
         return material
     }
