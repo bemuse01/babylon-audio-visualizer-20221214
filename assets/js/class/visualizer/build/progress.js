@@ -20,6 +20,8 @@ export default class{
         this.radius = 21.5
         this.linewidth = 2
         this.seg = 64
+        this.color1 = BABYLON.Color3.FromHexString('#4dfff9')
+        this.color2 = BABYLON.Color3.FromHexString('#4d33ea')
 
         this.init()
     }
@@ -59,13 +61,15 @@ export default class{
             },
             {
                 attributes: ['position', 'uv'],
-                uniforms: ['worldViewProjection', 'viewProjection', 'eResolution', 'progress'],
+                uniforms: ['worldViewProjection', 'viewProjection', 'eResolution', 'progress', 'color1', 'color2'],
                 needAlphaBlending: true,
                 needAlphaTesting: true,
             },
         )
 
         material.setVector2('eResolution', new BABYLON.Vector2(this.rw, this.rh))
+        material.setColor3('color1', this.color1)
+        material.setColor3('color2', this.color2)
 
         return material
     }
