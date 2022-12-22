@@ -105,6 +105,9 @@ export default class{
     getProgress(){
         return this.audio.currentTime / this.audio.duration
     }
+    getCurrentTime(){
+        return this.audio.currentTime
+    }
 
 
     // set

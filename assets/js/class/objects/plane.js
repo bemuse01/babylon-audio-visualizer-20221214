@@ -4,7 +4,6 @@ export default class{
     constructor({width, height, scene}){
         this.width = width
         this.height = height
-        this.seg = seg
         this.scene = scene
 
         this.init()

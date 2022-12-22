@@ -1,5 +1,6 @@
-import Ring from '../../objects/ring.js'
+import Plane from '../../objects/plane.js'
 import Method from '../../../method/method.js'
+import ShaderName from '../shader/current.shader.js'
 
 export default class{
     constructor({
@@ -8,20 +9,28 @@ export default class{
         camera, 
         audio, 
         rtt,
+        planeHeight,
+        color1,
+        color2
     }){
         this.scene = scene
         this.engine = engine
         this.camera = camera
         this.audio = audio
         this.rtt = rtt
+        this.planeHeight = planeHeight
+        this.color1 = color1
+        this.color2 = color2
 
-        this.planeHeight = 20
+        this.rw = this.engine.getRenderWidth()
+        this.rh = this.engine.getRenderHeight()
         this.fontSize = 512
         this.font = `${this.fontSize}px NotoSansDisplayLight`
-        this.color1 = BABYLON.Color3.FromHexString('#4dfff9')
-        this.color2 = BABYLON.Color3.FromHexString('#4d33ea')
 
+        this.plane = null
         this.textTexture = null
+        this.textureWidth = 0
+        this.textureHeight = 0
 
         this.init()
     }
@@ -38,57 +47,51 @@ export default class{
 
     // create
     create(){
-        const {planeHeight} = this
+        const {planeHeight, scene} = this
         const {planeWidth} = this.createTexture()
+        const material = this.createMaterial()
       
-        const mat = new BABYLON.StandardMaterial(Method.uuidv4(), this.scene)
-        mat.diffuseTexture = this.textTexture
-        mat.diffuseTexture.hasAlpha = true
-        mat.emissiveColor = new BABYLON.Color3(1, 1, 1)
+        this.plane = new Plane({width: planeWidth, height: planeHeight, scene})
+        this.plane.setMaterial(material)
 
-        const plane = BABYLON.MeshBuilder.CreatePlane('plane1', {width: planeWidth, height: planeHeight}, this.scene)
-        plane.material = mat
-
-        this.scene.removeMesh(plane)
-        this.rtt.renderList.push(plane)
+        this.scene.removeMesh(this.plane.get())
+        this.rtt.renderList.push(this.plane.get())
     }
     createTexture(){
         const text = '0:00'
-        const textureHeight = 1.5 * this.fontSize
+        this.textureHeight = 1.5 * this.fontSize
     
-        const ratio = this.planeHeight / textureHeight
+        const ratio = this.planeHeight / this.textureHeight
         
         const temp = new BABYLON.DynamicTexture('temp', 64, this.scene)
         const tmpctx = temp.getContext()
         tmpctx.font = this.font
-        const textureWidth = tmpctx.measureText(text).width + 8
+        this.textureWidth = tmpctx.measureText(text).width + 8
 
-        const planeWidth = textureWidth * ratio
+        const planeWidth = this.textureWidth * ratio
 
-        this.textTexture = new BABYLON.DynamicTexture(Method.uuidv4(), {width: textureWidth, height: textureHeight}, this.scene, false)
-        this.textTexture.drawText(text, null, null, this.font, '#ffffff', 'transparent', true)
+        this.textTexture = new BABYLON.DynamicTexture(Method.uuidv4(), {width: this.textureWidth, height: this.textureHeight}, this.scene, false)
+        this.textTexture.hasAlpha = true
 
         return {planeWidth}
     }
     createMaterial(){
-        const material = new BABYLON.ShaderMaterial('particleShader', this.scene, {
+        const material = new BABYLON.ShaderMaterial('currentShader', this.scene, {
                 vertex: ShaderName,
                 fragment: ShaderName,
             },
             {
                 attributes: ['position', 'uv'],
-                uniforms: ['worldViewProjection', 'viewProjection', 'eResolution', 'oResolution', 'progress', 'color1', 'color2', 'radius', 'size'],
+                uniforms: ['worldViewProjection', 'viewProjection', 'tText', 'eResolution', 'color1', 'color2'],
                 needAlphaBlending: true,
                 needAlphaTesting: true,
             },
         )
 
         material.setVector2('eResolution', new BABYLON.Vector2(this.rw, this.rh))
-        material.setVector2('oResolution', new BABYLON.Vector2(this.vw, this.vh))
+        material.setTexture('tText', this.textTexture)
         material.setColor3('color1', this.color1)
         material.setColor3('color2', this.color2)
-        material.setFloat('radius', this.radius + this.linewidth / 2)
-        material.setFloat('size', this.linewidth / 2)
 
         return material
     }
@@ -102,6 +105,17 @@ export default class{
     }
     render(){
         if(!this.audio.isReady()) return
+
+        const ctx = this.textTexture.getContext()
+
+        const crtTime = this.audio.getCurrentTime()
+        const min = ~~(crtTime / 60)
+        const oSec = ~~(crtTime % 60)
+        const pSec = oSec < 10 ? '0' + oSec : oSec
+        const text = `${min}:${pSec}`
+
+        ctx.clearRect(0, 0, this.textureWidth, this.textureHeight)
+        this.textTexture.drawText(text, null, null, this.font, '#ffffff', 'transparent', true)
     }
 
 

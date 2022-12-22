@@ -18,19 +18,23 @@ export default class{
         this.vh = null
         this.vlsSample = 100
         this.rttSamples = 2 ** 3
+        
+        const color1 = BABYLON.Color3.FromHexString('#4dfff9')
+        const color2 = BABYLON.Color3.FromHexString('#4d33ea')
+        const scale = 0.85
 
         this.params = [
             {
                 module: Bar,
                 count: 100,
-                width: 1.25,
-                height: 1.25 + 2,
-                radius: 25 - 2 / 2,
+                width: 1.25 * scale,
+                height: (1.25 + 2) * scale,
+                radius: (25 - 2 / 2) * scale,
                 splineSmooth: 0.2,
                 audioBoost: 30,
                 audioStep: 30,
-                color1: BABYLON.Color3.FromHexString('#4dfff9'),
-                color2: BABYLON.Color3.FromHexString('#4d33ea'),
+                color1,
+                color2,
                 colorOffset: 0.0,
                 masterOpacity: 0.275,
                 effect: false,
@@ -40,14 +44,14 @@ export default class{
             {
                 module: Bar,
                 count: 100,
-                width: 1.25,
-                height: 1.25,
-                radius: 25,
+                width: 1.25 * scale,
+                height: 1.25 * scale,
+                radius: 25 * scale,
                 splineSmooth: 0.2,
                 audioBoost: 30,
                 audioStep: 30,
-                color1: BABYLON.Color3.FromHexString('#4dfff9'),
-                color2: BABYLON.Color3.FromHexString('#4d33ea'),
+                color1,
+                color2,
                 colorOffset: 0.0,
                 masterOpacity: 1.0,
                 effect: true,
@@ -55,10 +59,18 @@ export default class{
                 masterZ: 0
             },
             {
-                module: Progress
+                module: Progress,
+                color1,
+                color2,
+                radius: 21.5 * scale,
+                linewidth: 2 * scale,
+                seg: 64
             },
             {
-                module: Current
+                module: Current,
+                planeHeight: 20 * scale,
+                color1,
+                color2,
             }
         ]
         this.comps = []

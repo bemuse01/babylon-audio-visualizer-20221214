@@ -9,23 +9,28 @@ export default class{
         camera, 
         audio, 
         rtt,
+        radius,
+        linewidth,
+        seg,
+        color1,
+        color2,
     }){
         this.scene = scene
         this.engine = engine
         this.camera = camera
         this.audio = audio
         this.rtt = rtt
+        this.radius = radius
+        this.linewidth = linewidth
+        this.seg = seg
+        this.color1 = color1
+        this.color2 = color2
 
         this.rw = this.engine.getRenderWidth()
         this.rh = this.engine.getRenderHeight()
         this.aspect = this.engine.getAspectRatio(this.camera)
         this.vw = Method.getVisibleWidth(this.camera, this.aspect, 0)
         this.vh = Method.getVisibleHeight(this.camera, 0)
-        this.radius = 21.5
-        this.linewidth = 2
-        this.seg = 64
-        this.color1 = BABYLON.Color3.FromHexString('#4dfff9')
-        this.color2 = BABYLON.Color3.FromHexString('#4d33ea')
 
         this.init()
     }
@@ -61,7 +66,7 @@ export default class{
         this.rtt.renderList.push(this.ring.get())
     }
     createMaterial(){
-        const material = new BABYLON.ShaderMaterial('particleShader', this.scene, {
+        const material = new BABYLON.ShaderMaterial('progressShader', this.scene, {
                 vertex: ShaderName,
                 fragment: ShaderName,
             },
