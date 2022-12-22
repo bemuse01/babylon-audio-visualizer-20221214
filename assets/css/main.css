@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
     font-family: NotoSansDisplayLight;
     src: url('../src/NotoSansDisplay-Light.ttf');
 }
@@ -10,6 +10,18 @@
     font-family: RobotoLight;
     src: url('../src/Roboto-Light.ttf');
 }
+@font-face {
+    font-family: NotoSansThin;
+    src: url('../src/NotoSans-Thin.ttf');
+} */
+@font-face {
+    font-family: NotoSansExtraLight;
+    src: url('../src/NotoSans-ExtraLight.ttf');
+}
+/* @font-face {
+    font-family: NotoSansLight;
+    src: url('../src/NotoSans-Light.ttf');
+} */
 
 
 *{

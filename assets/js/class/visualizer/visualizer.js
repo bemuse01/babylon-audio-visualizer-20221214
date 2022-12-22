@@ -68,9 +68,10 @@ export default class{
             },
             {
                 module: Current,
-                planeHeight: 20 * scale,
+                planeHeight: 19 * scale,
                 color1,
                 color2,
+                fontFamily: 'NotoSansExtraLight'
             }
         ]
         this.comps = []

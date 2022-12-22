@@ -11,7 +11,8 @@ export default class{
         rtt,
         planeHeight,
         color1,
-        color2
+        color2,
+        fontFamily
     }){
         this.scene = scene
         this.engine = engine
@@ -25,7 +26,7 @@ export default class{
         this.rw = this.engine.getRenderWidth()
         this.rh = this.engine.getRenderHeight()
         this.fontSize = 512
-        this.font = `${this.fontSize}px NotoSansDisplayLight`
+        this.font = `${this.fontSize}px ${fontFamily}`
 
         this.plane = null
         this.textTexture = null
