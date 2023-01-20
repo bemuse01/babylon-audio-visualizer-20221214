@@ -40,6 +40,9 @@ div#wrap{
     width: 100vw;
     height: 100vh;
 }
+canvas{
+    outline: none;
+}
 
 
 /* progress */
